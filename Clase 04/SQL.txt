@@ -1,0 +1,192 @@
+Hacer consultas 
+Sentencia Select
+Obtener datos de tablas que estan almacenados dentro de la base de datos.
+Ejemplo: SELECT * FROM 	jobs;
+
+Sentencia Describe
+Esta es muy util para cuando no se conocen los tipos de datos que estan insertados en la base de datos.
+Describe jobs;
+
+Vimos que para traer los datos de una base es con
+SELECT * FROM jobs;
+Pero si en vez de usar el * que es para traer todo, especificamos una columna en especifico, solo muestra esa columna.
+SELECT job_id FROM jobs;
+
+Para traer 2 o mas columnas se usan las comas " , "
+SELECT job_id, min-sal FROM jobs;
+
+Recordatorio SQL no es sensible a mayusculas o minisculas, no importa si tienes espacios de mas de la consulta,
+todo lo va a leer hasta que llegue al punto y coma " ; "
+
+Cambiar el alias de la columna
+SELECT job_id AS JOB, min_salary AS minimun_salary FROM jobs;
+
+Veemos que se genera un encabezado para la columna "JOB"
+
+
+Si queremos que se respete el orden de mayusculas y minisculas usamos "Job" en commillas para que se respete.
+
+SELECT departmen_id FROM employees; me muestra todas la veces en que se asigno un id de departamento
+
+SELECT DISTINCT department_id FROM employees;
+nos muestra los resultados que son distintos incluyendo el null (12 registros)
+
+Aplica en mas de una columna ejemplo:
+SELECT DISTINCT department_id, job_id FROM employees;
+En este caso muestra todas las posibilidades sin repetir de las 2 columnas (20 registros sin repertirse)
+
+
+Tablas Dual
+Operaciones Aritmeticas
+SELECT 3 * 4 FROM employees;
+Se mostrara el numero de filas que tenga esa tabla.
+
+Pero solo quiero que se muestre un resultado, usamos la tabla DUAL.
+SELECT * FROM dual;
+nos da como valor x en una columna x. De preferiencia no cambiar, no borrar.
+SELECT 3 * 4 FROM dual; 
+a traves de esto se puede mostra potencias, logaritmos y exponenciales.
+
+SELECT 'HOLA MUNDO' FROM DUAL;
+SELECT SYSDATE FROM dual;
+SELECT USER FROM dual;
+SELECT ('USUARIO: ') || USER || ', el dia de hoy es;' || SYSDATE)
+AS 'ENCABEZADO' FROM dual;
+
+SELECT 'I'' m' || USER FROM dual;
+Si vemos se tiene que insertar dos veces la comilla sencilla para que no se confunda el compilador que termine esa instruccion antes, y para
+romper eso lo ponemos doble.
+
+Añadir filtros con la clausula WHERE
+SELECT first_name || ' ' || last_name ¨Name¨, department_id FROM employees;
+Nos muestra todos los campos de esas dos columnas
+
+SELECT first_name || ' ' || last_name ¨Name¨, department_id FROM employees WHERE department_id = 40;
+
+SELECT first_name || ' ' || last_name ¨Name¨, department_id FROM employees WHERE department_id = 80;
+
+SELECT department_name FROM departments WHERE DEPARTMENT_ID = 80;
+SELECT department_name FROM departments WHERE DEPARTMENT_ID = 90;
+
+DESC job_history;
+
+SELECT * FROM job_history WHERE job_id = 'AC_ACOUNT'
+
+SELECT * FROM countries WHERE region_id = 4;
+
+DESC region_name FROM regions WHERE region_id = 4;
+
+
+-- diferente <>, != 
+-- menor que <, <=
+-- mayor que >, >=
+
+SELECT first_name || ' ' || last_name ¨Name¨, commission_pct FROM employees WHERE commission_pct != 0.35 ;
+SELECT first_name || ' ' || last_name ¨Name¨, commission_pct FROM employees WHERE commission_pct >= 0.35 ;
+
+--IN lista de valores a comparar 
+SELECT first_name || ' ' || last_name ¨Name¨, department_id FROM employees WHERE department_id IN (10,20,50);
+vemos que solo aparecen en esos valores especificamente y los demas son excluidos.
+
+Operadores Logicos
+Empezamos con el NOT
+SELECT first_name , department_id FROM employees WHERE NOT (departmente_id >= 30);
+
+SELECT first_name , salary FROM employees WHERE last_name = 'Smith' AND salary > 7500;
+Si una de las dos condiciones no se cumple se considera falsas.
+ 
+Nota:
+La unica manera en que SQL considere las Mayusculas diferentes de las minisculas es cuando estan dentro de comillas sencillas o dobles.
+
+SELECT first_name, last_name FROM employees WHERE first_name = 'Kelly' OR last_name = 'Smith';
+AQUI donde se cumpla una de las dos condiciones se cumple se cumple todo.
+
+--BETWEEN Es para usar rangos
+SELECT first_name, last_name, salary
+FROM employees WHERE salary BETWEEN 5000 AND 6000;
+
+Tambien funciona de esta manera
+SELECT first_name, last_name, salary
+FROM employees WHERE salary >= 5000 salary <= 6000;
+
+--% Comodin reemplazar 0 o más caracteres 
+Operaciones con cadenas mas avanzadas
+SELECT first_name, last_name,  
+FROM employees WHERE first_name LIKE 'Su%';
+El signo de porcentaje es un comodin. First name se parece a Su. osea manda llamar a todos los que se se empiezan llamando por Su
+
+Si queremos que ahora busque en lugar de buscar al principio que ahora termine en cierta letra lo invertimos así;
+SELECT first_name, last_name,  
+FROM employees WHERE first_name LIKE '%a';
+y me manda llamar a las personas que terminen con a
+
+Ahora queremos que nos muestre a las personas que empiezan con una letra y terminen con otra
+SELECT first_name, last_name,  
+FROM employees WHERE first_name LIKE 'C%a';
+
+Ahora si queremos que todos los nombres que aparezcan con una m seria asi:
+SELECT first_name, last_name,  
+FROM employees WHERE first_name LIKE '%m%';
+
+
+SELECT first_name, last_name,  
+FROM employees WHERE department_id = NULL;
+Aparecera un empleado que es null pero no se ve, entonces que le paso no se pueden hacer las comparaciones con el signo =
+Se corrige con esto
+
+SELECT first_name, last_name,  
+FROM employees WHERE department_id IS NULL;
+
+Ahora los que no son NULL seria
+
+SELECT first_name, last_name,  
+FROM employees WHERE department_id IS NOT NULL;
+
+
+Ordenando por OrderBY
+SELECT * FROM countries;
+
+Aparecen los datos estar ordenados pero no se dejen engañar lo recomendable es ordenarlos por nosotros mismos.
+SELECT * FROM countries ORDER BY country_name
+SELECT * FROM countries ORDER BY region_id            
+Se ordenan por numero de menor a mayor
+
+SELECT * FROM countries ORDER BY region_id, country_name;
+Ahora ordena por número de menor a mayor y por orden alfabetico.
+
+
+SELECT first_name || ' ' || last_name "Employee name"
+FROM employees WHERE department_id = 90 ORDER BY last_name;
+En esta consulta se ordenan de manera descendente
+
+
+SELECT last_name, first_name FROM employees ORDER BY last_name DESC;
+
+SELECT last_name, first_name FROM employees  ORDER BY last_name DESC, first_name ASC;
+Por default los ordenamientos son ASCENDENTES 
+
+SELECT first_name, hire_date, salary, manager_id mid FROM employees
+WHERE departmente_id IN (110,100) ORDER BY 4, 2, 3;
+Se ordenaran por mid, luego HIRE_DATE y por Salary.
+
+SELECT last_name, commission_pct FROM employees WHERE last_name LIKE 'R&' 
+ORDER BY commission_pct ASC, last_name DESC;
+
+
+Funcion de caracter CONCAT
+SELECT 'Esta es una cadena' || 'otra cadena' FROM dual;
+
+--CONCAT () //Esta funcion recibe dos argumentos
+SELECT CONCAT('Esta es una cadena ', 'y esta es otra cadena') FROM dual;
+
+SELECT CONCAT(CONCAT('UNO', ' DOS'), ' TRES') FROM dual;
+La ejecución interior es la que se ejecuta primero.
+
+SELECT CONCAT(CONCAT('first_name', ' last_name'), ' employee_name, first_name || ' ' || last_name AS employee_name_2  FROM employees WHERE department_id = 30;
+Concatenar los datos de como lo vemos a la salida.
+
+
+Uso de uso de JOIN
+--Regio de Canada
+
+

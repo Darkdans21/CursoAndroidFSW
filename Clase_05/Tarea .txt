@@ -1,0 +1,7 @@
+Tarea para el sabado 13 mayo 2017
+La tarea de android de esta semana era hacer una aplicacion que tuviera 3 actividades con sus respectivos layouts (pantallas) y la primera te mande a la segunda y esa te mande a la que sigue (osea la tercera) y de esta se regrese a la primera.
+                      
+
+Además de agregar una opción de validación al salir en la primera actividad.
+
+Despues se le debe enviar una cadena en una actividad un número y que en la siguiente actividad se muestre lo que se escribio. Recuerden validar con un mensaje diciendo que los campos no estén vacíos.
